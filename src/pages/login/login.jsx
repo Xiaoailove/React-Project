@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import logo from './images/logo.png'
 import './login.less'
 import { Form, Icon, Input, Button } from 'antd'
+import {reqLogin} from '../../api'
 class Login extends Component {
     handleSubmit = e => {
         e.preventDefault();
@@ -9,13 +10,17 @@ class Login extends Component {
         //const values = form.getFieldsValue()
         //const username = form.getFieldValue('username')
         //const password = form.getFieldValue('password')
-        this.props.form.validateFields((err, {username,password}) => {
+        this.props.form.validateFields(async (err, {username,password}) => {
             if (!err) {
-              alert(`登录成功用户${username}发送ajax请求`)
+             //const result= await reqLogin(username,password);
+             const result = await reqLogin(username, password)
+             if (result.status===0) {
+                 console.log(result)
+             }
             }else{
                 alert('登录失败')
             }
-          });
+        });
 
     };
     validatorPwd=(rule, value, callback)=>{
