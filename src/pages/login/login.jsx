@@ -3,6 +3,8 @@ import logo from './images/logo.png'
 import './login.less'
 import { Form, Icon, Input, Button,message } from 'antd'
 import {reqLogin} from '../../api'
+import storageUtils from '../../until/storageUtils'
+import memoryUtils from '../../until/memoryUtils'
 class Login extends Component {
     handleSubmit = e => {
         e.preventDefault();
@@ -16,6 +18,11 @@ class Login extends Component {
              const result = await reqLogin(username, password)
              //console.log(result)
              if(result.status===0){
+                 //登录成功之后需要将将消息保存到本地进而保存到内存中
+                const user=result.data
+                //console.log(user);
+                storageUtils.saveUser(user);
+                memoryUtils.users=user;
                  //登录成功以后将会跳转到admin页面
                  this.props.history.replace('/');
                  message.success('登录成功')
