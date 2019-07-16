@@ -13,14 +13,12 @@ axios.interceptors.request.use(function(config){
     
     return config;
 })
-axios.interceptors.response.use(function (response) {
-  
-    return response.data // 返回的结果就会交给我们指定的请求响应的回调
-    // return response // 返回的结果就会交给我们指定的请求响应的回调
-  }, function (error) { // 统一处理所有请求的异常错误
-    message.error('请求出错 ' + error.message)
-    // return Promise.reject(error);
-    // 返回一个pending状态的promise, 中断promise链
-    return new Promise(() => {})
-  });
+  axios.interceptors.response.use(function(response){
+    return response.data
+    
+  },function(error){
+    message.error('请求出错'+error.message)
+    return new Promise(()=>{});
+  })
+
 export default axios;

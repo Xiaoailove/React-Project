@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import logo from './images/logo.png'
 import './login.less'
-import { Form, Icon, Input, Button } from 'antd'
+import { Form, Icon, Input, Button,message } from 'antd'
 import {reqLogin} from '../../api'
 class Login extends Component {
     handleSubmit = e => {
@@ -14,11 +14,13 @@ class Login extends Component {
             if (!err) {
              //const result= await reqLogin(username,password);
              const result = await reqLogin(username, password)
-             if (result.status===0) {
-                 console.log(result)
+             //console.log(result)
+             if(result.status===0){
+                 //登录成功以后将会跳转到admin页面
+                 this.props.history.replace('/');
+                 message.success('登录成功')
+
              }
-            }else{
-                alert('登录失败')
             }
         });
 
