@@ -73,8 +73,14 @@ export default class Category extends Component {
   //点击取消模态框消失
   handleCancel = () => {
     this.form.resetFields()
+      this.setState({
+        showStatus: 0
+      })
+  }
+  showAdd=()=>{
+    this.category=null
     this.setState({
-      showStatus: 0
+      showStatus:1
     })
   }
   componentWillMount() {
@@ -87,7 +93,7 @@ export default class Category extends Component {
     const { categorys, loading, showStatus } = this.state
     const category = this.category || '{}'
     const extra = (
-      <Button type='primary' onClick={() => { this.setState({ showStatus: 1 }) }}>
+      <Button type='primary' onClick={this.showAdd}>
         <Icon type='plus' />
         添加
       </Button>

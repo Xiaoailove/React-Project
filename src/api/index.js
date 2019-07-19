@@ -50,12 +50,25 @@ export const reqUpdateCategory = ({
     categoryName
 })
 //获取商品管理的列表
-export const reqProducts = ({
+export const reqProducts = (
     pageNum,
     pageSize
-}) => ajax(BASE + 'manage/product/list', {
+) => ajax(BASE + '/manage/product/list', {
     params: {
         pageNum,
         pageSize
+    }
+})
+//根据Name/desc搜索产品分页列表
+export const reqSearchProduct = ({
+    pageNum,
+    pageSize,
+    searchName,
+    searchType
+}) => ajax(BASE + '/manage/product/search', {
+    params: {
+        pageNum,
+        pageSize,
+        [searchType]: searchName
     }
 })
