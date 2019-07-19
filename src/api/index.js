@@ -72,3 +72,11 @@ export const reqSearchProduct = ({
         [searchType]: searchName
     }
 })
+//对商品进行上下架处理
+export const reqUpdateStatus=(productId,status)=>ajax(BASE+'/manage/product/updateStatus',{
+    method:'POST',
+    data:{
+        productId,
+        status
+    }
+})

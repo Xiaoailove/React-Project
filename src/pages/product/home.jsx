@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
-import { Card, Select, Input, Button, Icon, Table } from 'antd'
+import { Card, Select, Input, Button, Icon, Table,message } from 'antd'
 import LinkButton from '../../components/link-button'
-import {reqProducts,reqSearchProduct} from '../../api'
+import {reqProducts,reqSearchProduct,reqUpdateStatus} from '../../api'
 const Option = Select.Option
 /**
  * 商品管理的首页组件
@@ -13,6 +13,18 @@ export default class ProductHome extends Component {
     total: 0,
     searchType:'productName',
     searchName:''
+  }
+  updatestatus=async(productId,status)=>{
+    //计算更新之后的值
+    status=status===1?2:1
+    //拿到新的status之后更新上下架的状态
+    const result=await reqUpdateStatus(productId,status)
+    if(result.status===0){
+      message.success('商品状态更新成功')
+      //获取当前页面显示
+      this.getProducts(this.pageNum)
+    }
+
   }
   initColums = () => {
     this.cloums = [
@@ -29,8 +41,8 @@ export default class ProductHome extends Component {
       }, {
         title: '状态',
         width: 100,
-        dataIndex: 'status',
-        render: (status) => {
+        // dataIndex: 'status',
+        render: ({_id,status}) => {
           let btnText = '下架'
           let text = '在售'
           if (status === 2) {
@@ -39,7 +51,7 @@ export default class ProductHome extends Component {
           }
           return (
             <span>
-              <Button type='primary'>{btnText}</Button>
+              <Button type='primary' onClick={()=>{this.updatestatus(_id,status)}}>{btnText}</Button>
               <span>{text}</span>
             </span>
           )
@@ -64,10 +76,10 @@ export default class ProductHome extends Component {
     //关于空字符串问题，空字符串转化为布尔值为false，取反之后为true
     if(!searchName){
       result=await reqProducts(pageNum,2)
-      console.log(1, result)
+      //console.log(1, result)
     }else{
       result=await reqSearchProduct({ pageNum, pageSize:2, searchName, searchType })
-      console.log(2, result)
+      //console.log(2, result)
     }
     if(result.status===0){
       const {total,list}=result.data
