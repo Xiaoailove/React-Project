@@ -86,3 +86,7 @@ export const reqUpdateStatus=(productId,status)=>ajax(BASE+'/manage/product/upda
         status
     }
 })
+//删除图片处理
+export const reqDeleteImg=(name)=>ajax.post(BASE+'/manage/img/delete',{name})
+//添加或者修改商品
+export const reqAddUpdateProduct=(procudt)=>ajax.post(BASE+'/manage/product/'+(procudt._id?'update':'add'),procudt)

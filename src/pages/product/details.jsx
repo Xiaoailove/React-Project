@@ -20,7 +20,7 @@ export default class ProductDetail extends Component {
     }
     componentDidMount() {
         const product = memoryUtils.product
-        console.log(product)
+        //console.log(product)
         if (product._id) {
             this.getCategory(product.categoryId)
         }
