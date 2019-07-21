@@ -90,3 +90,9 @@ export const reqUpdateStatus=(productId,status)=>ajax(BASE+'/manage/product/upda
 export const reqDeleteImg=(name)=>ajax.post(BASE+'/manage/img/delete',{name})
 //添加或者修改商品
 export const reqAddUpdateProduct=(procudt)=>ajax.post(BASE+'/manage/product/'+(procudt._id?'update':'add'),procudt)
+//获取所有角色的列表
+export const reqRoles=()=>ajax(BASE+'/manage/role/list')
+//添加角色
+export const reqAddRole=(roleName)=>ajax.post(BASE+'/manage/role/add',{roleName})
+//给角色添加权限的时候调用
+export const reqUpdateRole=(role)=>ajax.post(BASE+'/manage/role/update', role)
