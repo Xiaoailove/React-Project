@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
 import { Card, Select, Input, Button, Icon, Table,message } from 'antd'
+import throttle from 'lodash.throttle'
 import LinkButton from '../../components/link-button'
 import {reqProducts,reqSearchProduct,reqUpdateStatus} from '../../api'
+import memoryUtils from '../../until/memoryUtils'
 const Option = Select.Option
 /**
  * 商品管理的首页组件
@@ -12,20 +14,20 @@ export default class ProductHome extends Component {
     products: [],
     total: 0,
     searchType:'productName',
-    searchName:''
+    searchName:'',
   }
-  updatestatus=async(productId,status)=>{
-    //计算更新之后的值
-    status=status===1?2:1
-    //拿到新的status之后更新上下架的状态
-    const result=await reqUpdateStatus(productId,status)
-    if(result.status===0){
-      message.success('商品状态更新成功')
-      //获取当前页面显示
-      this.getProducts(this.pageNum)
-    }
-
-  }
+  updatestatus=throttle(
+    async(productId,status)=>{
+      //计算更新之后的值
+      status=status===1?2:1
+      //拿到新的status之后更新上下架的状态
+      const result=await reqUpdateStatus(productId,status)
+      if(result.status===0){
+        message.success('商品状态更新成功')
+        //获取当前页面显示
+        this.getProducts(this.pageNum)
+      }
+    },2000)
   initColums = () => {
     this.cloums = [
       {
@@ -60,7 +62,12 @@ export default class ProductHome extends Component {
         title: '操作',
         render: (product) => (
           <span>
-            <LinkButton>详情</LinkButton>
+            <LinkButton onClick={()=>{
+              memoryUtils.product=product
+              this.props.history.push('/product/detail',{product})
+            }}
+            >详情
+            </LinkButton>
             <LinkButton>修改</LinkButton>
           </span>
         )
@@ -74,7 +81,7 @@ export default class ProductHome extends Component {
     let result
     const {searchName,searchType}=this.state
     //关于空字符串问题，空字符串转化为布尔值为false，取反之后为true
-    if(!searchName){
+    if(!this.isSearch){
       result=await reqProducts(pageNum,2)
       //console.log(1, result)
     }else{
@@ -91,8 +98,10 @@ export default class ProductHome extends Component {
   }
   componentDidMount(){
     this.getProducts(1)
+    //console.log('getProducts函数调用')
   }
   render() {
+    //console.log(' render1 getProducts函数调用')
     const { loading, products, total,searchType,searchName } = this.state
     const title = (
       <span>
@@ -110,11 +119,19 @@ export default class ProductHome extends Component {
         value={searchName} 
         onChange={(event)=>this.setState({searchName:event.target.value})}
         />
-        <Button type='primary' onClick={()=>this.getProducts(1)}>搜索</Button>
+        <Button type='primary' onClick={()=>
+          {
+            this.isSearch=true
+            this.getProducts(1)
+          }
+          }>搜索</Button>
       </span>
     )
     const extra = (
-      <Button type='primary'>
+      <Button 
+      onClick={()=>{this.props.history.push('/product/addupdate')}}
+      type='primary'
+      >
         <Icon type='plus' />
         添加商品
       </Button>

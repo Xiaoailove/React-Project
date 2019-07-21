@@ -1,6 +1,16 @@
 import React, { Component } from 'react'
+import {Form,Card,Icon,Input,Select,Button,} from 'antd'
+import {reqCategorys} from '../../api'
+import LinkButton from '../../components/link-button'
+import memoryUtils from '../../until/memoryUtils'
+const Item=Form.Item
+const Option=Select.Option
 
-export default class ProductAddUpdate extends Component {
+class ProductAddUpdate extends Component {
+    state={
+        categorys:[]
+    }
+    
     render() {
         return (
             <div>
@@ -9,3 +19,4 @@ export default class ProductAddUpdate extends Component {
         )
     }
 }
+export default Form.create()(ProductAddUpdate)

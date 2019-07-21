@@ -49,6 +49,12 @@ export const reqUpdateCategory = ({
     categoryId,
     categoryName
 })
+//根据ID获取分类
+export const reqCategory=(categoryId)=>ajax(BASE+'/manage/category/info',{
+    params:{
+        categoryId
+    }
+})
 //获取商品管理的列表
 export const reqProducts = (
     pageNum,
