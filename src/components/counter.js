@@ -33,7 +33,7 @@ export default class Counter extends Component {
     this.props.incrementAsync(number)
   }
   render() {
-    const count=this.state.count
+    const count=this.props.count
     return (
       <div>
         <p>点击{count}次</p>
