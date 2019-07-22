@@ -8,6 +8,7 @@ import menuList from '../../config/menuConfig'
 import {formateDate} from '../../until/dateUtils'
 import {reqWeather} from '../../api'
 import LinkButton from '../../components/link-button'
+import {connect} from 'react-redux'
  class Header extends Component {
      state={
          currentTime:formateDate(Date.now()),
@@ -63,7 +64,8 @@ import LinkButton from '../../components/link-button'
         this.getWeather();
     }
     render() {
-        const title=this.getTitle();
+        //const title=this.getTitle();
+        const title=this.props.headerTitle
         const {currentTime,dayPictureUrl,weather}=this.state;
         return (
             <div className='header'>
@@ -83,4 +85,7 @@ import LinkButton from '../../components/link-button'
         )
     }
 }
-export default withRouter(Header)
+export default connect(
+    (state)=>({headerTitle:state}),
+    {}
+)(withRouter(Header))

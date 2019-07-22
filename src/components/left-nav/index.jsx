@@ -4,6 +4,8 @@ import { Menu, Icon } from 'antd';
 import logo from '../../assets/images/logo.png'
 import './index.less'
 import menuList from '../../config/menuConfig';
+import {connect} from 'react-redux'
+import {setHeaderTitle} from '../../redux/actions'
 const { SubMenu } = Menu
 //LeftNav
 class LeftNav extends Component {
@@ -13,7 +15,7 @@ class LeftNav extends Component {
             if (!item.children) {
                 return (
                     <Menu.Item key={item.key}>
-                        <Link to={item.key}>
+                        <Link to={item.key} onClick={() => this.props.setHeaderTitle(item.title)}>
                             <Icon type={item.icon} />
                             <span>{item.title}</span>
                         </Link>
@@ -76,4 +78,7 @@ class LeftNav extends Component {
         )
     }
 }
-export default withRouter(LeftNav)
+export default connect(
+    state=>{},
+    {setHeaderTitle}
+)(withRouter(LeftNav))
