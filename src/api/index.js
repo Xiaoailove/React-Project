@@ -96,3 +96,5 @@ export const reqRoles=()=>ajax(BASE+'/manage/role/list')
 export const reqAddRole=(roleName)=>ajax.post(BASE+'/manage/role/add',{roleName})
 //给角色添加权限的时候调用
 export const reqUpdateRole=(role)=>ajax.post(BASE+'/manage/role/update', role)
+//获取用户列表
+export const reqUsers=()=>ajax(BASE+'/manage/user/list')

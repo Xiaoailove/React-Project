@@ -55,12 +55,15 @@ import LinkButton from '../../components/link-button'
         })
     }
     componentDidMount(){
-        setInterval(()=>{
+      this.timeId=setInterval(()=>{
             this.setState({
                 currentTime:formateDate(Date.now())
             })
         },1000)
         this.getWeather();
+    }
+    componentWillUnmount(){
+        clearInterval(this.timeId)
     }
     render() {
         const title=this.getTitle();
