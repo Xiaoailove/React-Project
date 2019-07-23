@@ -12,6 +12,9 @@ class LeftNav extends Component {
     getMenuNodes = (menuList) => {
         const path = this.props.location.pathname
         return menuList.map((item) => {
+            if(item.key===path||path.indexOf(item.key)===0){
+                this.props.setHeaderTitle(item.title)
+            }
             if (!item.children) {
                 return (
                     <Menu.Item key={item.key}>
@@ -79,6 +82,6 @@ class LeftNav extends Component {
     }
 }
 export default connect(
-    state=>{},
+    state=>({headerTitle:state}),
     {setHeaderTitle}
 )(withRouter(LeftNav))
