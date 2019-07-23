@@ -24,7 +24,6 @@ import {logout} from '../../redux/actions'
                 // storageUtils.removeUser()
                 // memoryUtils.users={}
                 // this.props.history.replace('/login')
-                const user=this.props.user
                 this.props.logout()
             },
             onCancel(){

@@ -16,7 +16,6 @@ import User from '../user/user'
 //import {logout} from '../../redux/actions'
 const { Footer, Sider, Content } = Layout
  class Admin extends Component {
-
     render() {
         const user = this.props.user
         if (!user._id) {
