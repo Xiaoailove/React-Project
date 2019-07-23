@@ -1,10 +1,13 @@
 import React, { Component } from 'react'
+import {Redirect} from 'react-router-dom'
 import logo from '../../assets/images/logo.png'
 import './login.less'
 import { Form, Icon, Input, Button,message } from 'antd'
-import {reqLogin} from '../../api'
-import storageUtils from '../../until/storageUtils'
-import memoryUtils from '../../until/memoryUtils'
+import {connect} from 'react-redux'
+//import {reqLogin} from '../../api'
+//import storageUtils from '../../until/storageUtils'
+//import memoryUtils from '../../until/memoryUtils'
+import {login} from '../../redux/actions'
 class Login extends Component {
     handleSubmit = e => {
         e.preventDefault();
@@ -12,23 +15,23 @@ class Login extends Component {
         //const values = form.getFieldsValue()
         //const username = form.getFieldValue('username')
         //const password = form.getFieldValue('password')
-        this.props.form.validateFields(async (err, {username,password}) => {
+        this.props.form.validateFields ((err, {username,password}) => {
             if (!err) {
-             //const result= await reqLogin(username,password);
-             const result = await reqLogin(username, password)
-             //console.log(result)
-             if(result.status===0){
-                 //登录成功之后需要将将消息保存到本地进而保存到内存中
-                const user=result.data
-                //console.log(user);
-                storageUtils.saveUser(user);
-                memoryUtils.users=user;
-                 //登录成功以后将会跳转到admin页面
-                 this.props.history.replace('/');
-                 message.success('登录成功')
-
-             }
-            }
+                //const result= await reqLogin(username,password);
+               //  const result = await reqLogin(username, password)
+               //  //console.log(result)
+               //     if(result.status===0){
+               //         //登录成功之后需要将将消息保存到本地进而保存到内存中
+               //         const user=result.data
+               //         //console.log(user);
+               //         storageUtils.saveUser(user);
+               //         memoryUtils.users=user;
+               //         //登录成功以后将会跳转到admin页面
+               //         this.props.history.replace('/');
+               //         message.success('登录成功')
+               //     }
+                this.props.login(username,password)
+               }
         });
 
     };
@@ -47,6 +50,11 @@ class Login extends Component {
           }
     }
     render() {
+        const user=this.props.user
+        if(user._id){
+            return <Redirect to="/home"/>
+        }
+        const errorMsg=user.errorMsg
         const { getFieldDecorator } = this.props.form;
         return (
             <div className='login'>
@@ -55,6 +63,7 @@ class Login extends Component {
                     <h1>后台管理系统</h1>
                 </div>
                 <div className='login-content'>
+                    {errorMsg? message.error(errorMsg):null}
                     <h1>用户登录</h1>
                     <Form onSubmit={this.handleSubmit} className="login-form">
                         <Form.Item>
@@ -100,4 +109,7 @@ class Login extends Component {
     }
 }
 const WrapperForm = Form.create()(Login);
-export default WrapperForm
+export default connect(
+    state=>({user:state.user}),
+    {login}
+)(WrapperForm)

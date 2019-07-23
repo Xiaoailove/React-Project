@@ -2,13 +2,14 @@ import React, { Component } from 'react'
 import {Modal} from 'antd'
 import {withRouter} from 'react-router-dom'
 import './index.less'
-import  storageUtils from '../../until/storageUtils'
-import   memoryUtils from '../../until/memoryUtils'
+//import  storageUtils from '../../until/storageUtils'
+//import   memoryUtils from '../../until/memoryUtils'
 import menuList from '../../config/menuConfig'
 import {formateDate} from '../../until/dateUtils'
 import {reqWeather} from '../../api'
 import LinkButton from '../../components/link-button'
 import {connect} from 'react-redux'
+import {logout} from '../../redux/actions'
  class Header extends Component {
      state={
          currentTime:formateDate(Date.now()),
@@ -20,9 +21,11 @@ import {connect} from 'react-redux'
             title:'确认退出吗？',
             onOk:()=>{
                 //确定删除之后删除存储的信息以及本地内存中的用户信息
-                storageUtils.removeUser()
-                memoryUtils.users={}
-                this.props.history.replace('/login')
+                // storageUtils.removeUser()
+                // memoryUtils.users={}
+                // this.props.history.replace('/login')
+                const user=this.props.user
+                this.props.logout()
             },
             onCancel(){
                 console.log('取消')
@@ -67,10 +70,11 @@ import {connect} from 'react-redux'
         //const title=this.getTitle();
         const title=this.props.headerTitle
         const {currentTime,dayPictureUrl,weather}=this.state;
+        const user=this.props.user
         return (
             <div className='header'>
                 <div className='header-top'>
-                hello! admin &nbsp; &nbsp;
+                hello! {user.username} &nbsp; &nbsp;
                 <LinkButton onClick={this.logout}>退出</LinkButton>
                 </div>
                 <div className='header-bottom'>
@@ -86,6 +90,9 @@ import {connect} from 'react-redux'
     }
 }
 export default connect(
-    (state)=>({headerTitle:state}),
-    {}
+    (state)=>({
+        headerTitle:state.headerTitle,
+        user:state.user
+    }),
+    {logout}
 )(withRouter(Header))
